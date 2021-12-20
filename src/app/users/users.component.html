@@ -1,0 +1,13 @@
+<app-menu></app-menu>
+<h1 style='text-align:center'>Welcome {{username}}!</h1>
+<!----<div *ngFor="let user of users"> 
+    <span>{{user.firstName}}</span> 
+    <span>{{user.company}}</span> 
+    <span>{{user.designation}}</span> 
+</div>-->
+<ag-grid-angular style="width: 100%; height: 800px;"
+    class="ag-theme-alpine"
+    (gridReady)="onGridReady($event)"
+    [columnDefs]="columnDefs"
+    [rowData]="rowData">
+</ag-grid-angular>
