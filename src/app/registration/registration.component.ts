@@ -50,13 +50,13 @@ export class RegistrationComponent implements OnInit {
       designation:[''],
       dateofBirth:[''],
       userName: new FormControl({value: '', disabled: this.isLoggedIn?true:false}, Validators.required),
-      password: ['', [this.isLoggedIn?Validators.nullValidator:Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword:['',this.isLoggedIn?Validators.nullValidator:Validators.required],
     }
     ,{ 
       // here we attach our form validator
     
-      validators: this.isLoggedIn? Validators.nullValidator :this.controlsEqual('confirmPassword', 'password')
+      validators:this.controlsEqual('confirmPassword', 'password')
 
     });
     if (this.isLoggedIn) {
@@ -75,7 +75,7 @@ export class RegistrationComponent implements OnInit {
 
   return (form: FormGroup) => {
     const control = form.get(controlName);
-    if(this.form.get('password').dirty){
+    if(form.get('password').dirty){
     if (control.value !== form.get(equalToName).value) {
       control.setErrors({ [errorKey]: true });
       return {
@@ -179,5 +179,10 @@ export class RegistrationComponent implements OnInit {
   getCities(event){
     var index = this.stateArr.findIndex(state => state.id==event.target.value);
     this.cityArr=this.stateArr[index].cities;
+  }
+  cancel(){
+    alert("Do you want to leave ?Changesyou have made will not be saved");
+    this.router.navigate(['/home'])
+   
   }
 }
