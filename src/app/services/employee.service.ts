@@ -92,4 +92,8 @@ users:Employee[];
     return this.http.get("http://localhost:8080/employee/"+this.getLoggedInUserName());
 
   }
+
+  deleteUserByAdmin(id:String){
+    return this.http.delete("http://localhost:8080/admin/delete/"+id);
+  }
 }

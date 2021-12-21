@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
   submitted = false;
   returnUrl: string;
   display=false;
+   user = new Map<String, string>();
 
   constructor( 
     private employeeService:EmployeeService,
@@ -44,19 +45,28 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.valid){
      
       //console.log(this.loginForm.controls);
-      const user = new Map<String, string>();
       
-        user["UserName"] = this.loginForm.value["userName"];
-        user["password"] = this.loginForm.value["password"];
+      
+        this.user["UserName"] = this.loginForm.value["userName"];
+        this.user["password"] = this.loginForm.value["password"];
 
-    this.employeeService.loginUser(user).subscribe(
+
+    this.employeeService.loginUser(this.user).subscribe(
       (data)=>
       {
         console.log(data);
         if(data!=null){ 
         this.employeeService.handleLogin(data);
           alert('login successful');
+          console.log(this.user["UserName"])
+          if(this.user["UserName"]=="admin"){
+            console.log("inside admin method")
+            this.router.navigate(['../admin'],{state: {data:this.f.userName.value}})
+            return ''
+          }
+          else{
           this.router.navigate(['../users'],{state: {data:this.f.userName.value}});
+          }
         }
         else{
           this.employeeService.handleError();

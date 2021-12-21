@@ -17,6 +17,9 @@ import { RegistrationComponent } from './registration/registration.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ErrorComponent } from './error/error.component';
 import { MenuComponent } from './menu/menu.component';
+import { AdminComponent } from './admin/admin.component';
+import { ButtonRendererComponent } from './button-renderer/button-renderer.component';
+
 
 
 const routes: Routes = [
@@ -24,6 +27,7 @@ const routes: Routes = [
   { path: 'users',component:UsersComponent},
   {path:'register',component:RegistrationComponent},
   {path:'error',component:ErrorComponent},
+  {path:'admin',component:AdminComponent},
   // otherwise redirect to home
   { path: '**', redirectTo: 'home' }
 ];
@@ -37,7 +41,9 @@ const routes: Routes = [
     RegistrationComponent,
     ErrorComponent,
     MenuComponent,
-    HomeComponent
+    HomeComponent,
+    AdminComponent,
+    ButtonRendererComponent
   ],
   imports: [
     BrowserModule,
