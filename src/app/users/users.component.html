@@ -1,20 +1,28 @@
 <app-menu></app-menu>
+<div class="container mt-3">
 <h1 style='text-align:center'>Welcome {{username}}!</h1>
-<button (click)="getSelected()">Delete</button>
+<div class="container mb-3" *ngIf="isAdmin">
+<button class="btn btn-danger float-end" (click)="deleteSelected()">Delete</button>
+<button class="btn btn-primary" (click)="editSelected()">Edit</button>
+</div>
+</div>
 <!----<div *ngFor="let user of users"> 
     <span>{{user.firstName}}</span> 
     <span>{{user.company}}</span> 
     <span>{{user.designation}}</span> 
 </div>-->
+<div class=" mt-3 pt-5">
 <ag-grid-angular style="width: 100%; height: 800px;"
     class="ag-theme-alpine"
     (gridReady)="onGridReady($event)"
     [defaultColDef]="defaultColDef"
-    [autoGroupColumnDef]="autoGroupColumnDef"
-    [rowSelection]="rowSelection"
-    [groupSelectsChildren]="true"
+ [autoGroupColumnDef]="autoGroupColumnDef" 
+ [rowSelection]="rowSelection"
+   
     [suppressRowClickSelection]="true"
     [suppressAggFuncInHeader]="true"
     [columnDefs]="columnDefs"
     [rowData]="rowData">
 </ag-grid-angular>
+</div>
+<app-registration [employee]="employee"></app-registration>

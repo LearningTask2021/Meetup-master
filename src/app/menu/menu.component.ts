@@ -10,6 +10,7 @@ import { EmployeeService } from '../services/employee.service';
 export class MenuComponent implements OnInit {
 
    isLoggedIn=this.employeeService.isUserLoggedIn();
+   isAdmin=this.employeeService.isAdmin();
   //constructor();
   constructor(private employeeService:EmployeeService,
     private router: Router) { 

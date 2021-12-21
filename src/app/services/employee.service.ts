@@ -12,6 +12,8 @@ import { Observable } from 'rxjs';
 })
 export class EmployeeService {
   
+  private userName:String;
+
   USER_SESSION_ATTRIBUTE_NAME= 'authenticatedUser';
 
    httpOptions = {
@@ -59,6 +61,15 @@ users:Employee[];
     if (user === null) return ''
     //console.log(user);
     return user.userName
+  }
+
+  isAdmin() {
+    this.userName=this.getLoggedInUserName();
+    if(this.userName=="admin")
+    return true;
+    else{
+      return false;
+    }
   }
 
   logoutUser(){

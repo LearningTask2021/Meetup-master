@@ -1,19 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Employee } from '../model/employee';
 import { EmployeeService } from '../services/employee.service';
 import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { MenuComponent } from '../menu/menu.component';
 
 
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  styleUrls: ['./users.component.css'],
+  providers:[]
 })
 export class UsersComponent implements OnInit {
 
   username:String="";
- 
+ isAdmin:boolean=false;
   rowData: Employee[];
   basics:ColDef[];
   columnDefs: ColDef[];
@@ -22,6 +24,7 @@ export class UsersComponent implements OnInit {
   defaultColDef;
    autoGroupColumnDef;
    rowSelection;
+  employee: Employee;
   
  
 
@@ -33,8 +36,8 @@ export class UsersComponent implements OnInit {
       minWidth: 100,
     };
     this.autoGroupColumnDef = {
-      headerName: 'Athlete',
-      field: 'athlete',
+    //  headerName: 'Athlete',
+      //field: 'athlete',
       minWidth: 250,
       cellRenderer: 'agGroupCellRenderer',
       cellRendererParams: { checkbox: true },
@@ -47,6 +50,9 @@ export class UsersComponent implements OnInit {
   
   ngOnInit(): void {
     this.username=this.employeeService.getLoggedInUserName();
+    if(this.username=="admin")
+    this.isAdmin=true
+    console.log(this.isAdmin);
     this.employeeService.getAllUsers().subscribe(
       data=>
       {
@@ -69,7 +75,7 @@ export class UsersComponent implements OnInit {
 
   createColumnDefs(): ColDef[] {
     return [
-     {field:'userName',filter:true,floatingFilter:true,checkboxSelection: true},
+     {field:'userName',filter:true,floatingFilter:true,checkboxSelection: this.employeeService.getLoggedInUserName()=="admin" },
      {field:'company',filter:true,floatingFilter:true},
      {field:'designation',filter:true,floatingFilter:true},
      {field:'email'}
@@ -79,23 +85,36 @@ export class UsersComponent implements OnInit {
 
 }
 
-getSelected(){
+deleteSelected(){
+  
  const l:any[]=this.api.getSelectedNodes();
- 
+
  l.forEach(i=> 
   {
     console.log(i.data);
     this.employeeService.deleteUserByAdmin(i.data.id).subscribe(
       data=>{
         console.log("deleted!");
-        alert("Deleted the records")
-        this.ngOnInit();
       }
     )
+    alert("Deleted the records")
+    this.ngOnInit();
    
   }
-  )
- 
+  ) 
+}
+
+editSelected(){
+  const l:any[]=this.api.getSelectedNodes();
+  if(l.length>1){
+    alert("selelct only one profile to edit");
+    return ''
+  }
+  else{
+    this.employee=l[0]
+    console.log(this.employee)
+  }
  
 }
+
 }

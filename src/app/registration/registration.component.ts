@@ -1,10 +1,11 @@
-import { Attribute, Component, Input, OnInit } from '@angular/core';
+import { Attribute, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Employee } from '../model/employee';
 import { EmployeeService } from '../services/employee.service';
 import { MenuComponent } from '../menu/menu.component';
 import { Address } from '../model/address';
+import { UsersComponent } from '../users/users.component';
 
 @Component({
   selector: 'app-registration',
@@ -12,14 +13,14 @@ import { Address } from '../model/address';
   styleUrls: ['./registration.component.css'],
   providers:[EmployeeService]
 })
-export class RegistrationComponent implements OnInit {
 
+export class RegistrationComponent implements OnInit {
+  @Input() employee:Employee;
   form: FormGroup;
   countryArr: any;
   stateArr: any;
   cityArr: any;
   submitted = false;
-  private employee:Employee;
   isLoggedIn:boolean;
   required:any;
   constructor(
@@ -181,8 +182,16 @@ export class RegistrationComponent implements OnInit {
     this.cityArr=this.stateArr[index].cities;
   }
   cancel(){
-    alert("Do you want to leave ?Changesyou have made will not be saved");
+    alert("Do you want to leave?Changesyou have made will not be saved");
     this.router.navigate(['/home'])
    
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // changes.prop contains the old and the new value...
+    console.log(this.employee);
+    console.log(changes.employee);
+  }
+ 
+
 }
