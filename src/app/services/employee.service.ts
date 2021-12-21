@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
 export class EmployeeService {
   
   private userName:String;
-
+editemployee:Employee;
   USER_SESSION_ATTRIBUTE_NAME= 'authenticatedUser';
 
    httpOptions = {
@@ -27,6 +27,14 @@ export class EmployeeService {
 users:Employee[];
 
   constructor(public http:HttpClient) { }
+
+  getEditEmployee(){
+    return this.editemployee
+  }
+  setEditEmployee(emp:Employee){
+    this.editemployee=emp
+    console.log(this.editemployee)
+  }
 
   addEmployee(employee:Employee){
     return this.http.post<Employee>("http://localhost:8080/employee",employee)

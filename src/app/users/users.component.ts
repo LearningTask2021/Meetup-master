@@ -1,8 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Employee } from '../model/employee';
 import { EmployeeService } from '../services/employee.service';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColDef, ColumnApi, GridApi, RowNode } from 'ag-grid-community';
 import { MenuComponent } from '../menu/menu.component';
+import { Router } from '@angular/router';
 
 
 
@@ -24,12 +25,16 @@ export class UsersComponent implements OnInit {
   defaultColDef;
    autoGroupColumnDef;
    rowSelection;
+   l:RowNode[];
+   edit:boolean=false;
   employee: Employee;
+
+ // employee: Employee;
   
  
 
 
-  constructor(private employeeService:EmployeeService) {
+  constructor(private employeeService:EmployeeService,private router:Router) {
     this.columnDefs = this.createColumnDefs();
     this.defaultColDef = {
       flex: 1,
@@ -87,9 +92,9 @@ export class UsersComponent implements OnInit {
 
 deleteSelected(){
   
- const l:any[]=this.api.getSelectedNodes();
+  this.l=this.api.getSelectedNodes();
 
- l.forEach(i=> 
+ this.l.forEach(i=> 
   {
     console.log(i.data);
     this.employeeService.deleteUserByAdmin(i.data.id).subscribe(
@@ -105,14 +110,19 @@ deleteSelected(){
 }
 
 editSelected(){
-  const l:any[]=this.api.getSelectedNodes();
-  if(l.length>1){
+  this.edit=true
+  this.l=this.api.getSelectedNodes();
+  if(this.l.length>1){
     alert("selelct only one profile to edit");
     return ''
   }
   else{
-    this.employee=l[0]
-    console.log(this.employee)
+    this.employee=this.l[0].data
+  //  console.log(this.employee)
+    this.employeeService.setEditEmployee(this.employee);
+    console.log(this.employeeService.getEditEmployee());
+    this.router.navigate(["../register"])
+   
   }
  
 }

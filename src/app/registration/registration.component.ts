@@ -11,11 +11,11 @@ import { UsersComponent } from '../users/users.component';
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css'],
-  providers:[EmployeeService]
+  providers:[]
 })
 
 export class RegistrationComponent implements OnInit {
-  @Input() employee:Employee;
+  employee:Employee;
   form: FormGroup;
   countryArr: any;
   stateArr: any;
@@ -23,6 +23,9 @@ export class RegistrationComponent implements OnInit {
   submitted = false;
   isLoggedIn:boolean;
   required:any;
+  isAdmin:boolean=false;
+  
+
   constructor(
     private employeeService:EmployeeService,
     private formBuilder: FormBuilder,
@@ -31,7 +34,7 @@ export class RegistrationComponent implements OnInit {
   ) { }
   
   ngOnInit(): void {
-    
+   
     this.getCountries();
     this.isLoggedIn=this.employeeService.isUserLoggedIn();
     //this.required=this.isLoggedIn?Validators.nullValidator:Validators.required;
@@ -63,8 +66,15 @@ export class RegistrationComponent implements OnInit {
     if (this.isLoggedIn) {
 
       // this.form.get("userName").disable();
- 
+      //this.employee=this.employeeService.getEditEmployee()
+      this.isAdmin=this.employeeService.isAdmin();
+      if(this.isAdmin){
+        console.log(this.employeeService.getEditEmployee())
+        this.form.patchValue(this.employeeService.getEditEmployee());
+      }
+      else{
        this.employeeService.getUserByName().subscribe(x => this.form.patchValue(x));
+      }
  
    }
 }
@@ -118,6 +128,7 @@ export class RegistrationComponent implements OnInit {
           console.log(data);
      
         alert("Updated details!");
+
      
         this.router.navigate(["../users"]);
      
@@ -142,14 +153,25 @@ export class RegistrationComponent implements OnInit {
         alert("username cannot be admin");
         return "";
       }
+      console.log(this.form.value)
+      console.log(this.form.get("userName").value)
       this.employee=Object.assign({},this.form.value);
       this.employee.address=Object.assign({},this.employee.address);
-      this.employee.id=this.employeeService.getLoggedInUserId();
+      if(this.isAdmin)
+      this.employee.id=this.employeeService.editemployee.id;
+      else{
+        this.employee.id=this.employeeService.getLoggedInUserId();
+      }
       console.log(this.employee.userName);
       
     if(this.isLoggedIn){
     console.log("Submitted");
-    this.employee.userName=this.employeeService.getLoggedInUserName();
+    if(this.isAdmin)
+      this.employee.userName=this.employeeService.editemployee.userName;
+      else{
+        this.employee.userName=this.employeeService.getLoggedInUserName();
+      }
+   
     this.editUser();
     }
     else
@@ -187,11 +209,6 @@ export class RegistrationComponent implements OnInit {
    
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    // changes.prop contains the old and the new value...
-    console.log(this.employee);
-    console.log(changes.employee);
-  }
- 
+  
 
 }
