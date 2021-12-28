@@ -4,6 +4,7 @@ import { EmployeeService } from '../services/employee.service';
 import { ColDef, ColumnApi, GridApi, RowNode } from 'ag-grid-community';
 import { MenuComponent } from '../menu/menu.component';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -34,7 +35,8 @@ export class UsersComponent implements OnInit {
  
 
 
-  constructor(private employeeService:EmployeeService,private router:Router) {
+  constructor(private employeeService:EmployeeService,private router:Router,
+    private toastr: ToastrService) {
     this.columnDefs = this.createColumnDefs();
     this.defaultColDef = {
       flex: 1,
@@ -93,7 +95,10 @@ export class UsersComponent implements OnInit {
 deleteSelected(){
   
   this.l=this.api.getSelectedNodes();
-
+  if(this.l.length==0){
+    this.toastr.warning("Select a profile to delete")
+    return ''
+  }
  this.l.forEach(i=> 
   {
     console.log(i.data);
@@ -102,7 +107,9 @@ deleteSelected(){
         console.log("deleted!");
       }
     )
-    alert("Deleted the records")
+   // alert("Deleted the records")
+   
+   this.toastr.info("Deleted the selected records")
     this.ngOnInit();
    
   }
@@ -112,8 +119,12 @@ deleteSelected(){
 editSelected(){
   this.edit=true
   this.l=this.api.getSelectedNodes();
+  if(this.l.length==0){
+    this.toastr.warning("Select a profile to edit")
+  }
   if(this.l.length>1){
-    alert("selelct only one profile to edit");
+    //alert("selelct only one profile to edit");
+    this.toastr.warning("Select only one profile to edit");
     return ''
   }
   else{

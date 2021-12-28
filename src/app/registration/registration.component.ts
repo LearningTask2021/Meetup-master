@@ -262,6 +262,7 @@ addPhoto(){
   }
   cancel(){
     alert("Do you want to leave?Changesyou have made will not be saved");
+
     this.router.navigate(['/home'])
    
   }
