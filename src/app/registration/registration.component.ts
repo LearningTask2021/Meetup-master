@@ -1,4 +1,4 @@
-import { Attribute, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Attribute, Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Employee } from '../model/employee';
@@ -6,6 +6,10 @@ import { EmployeeService } from '../services/employee.service';
 import { MenuComponent } from '../menu/menu.component';
 import { Address } from '../model/address';
 import { UsersComponent } from '../users/users.component';
+import { HttpParams } from '@angular/common/http';
+import { ConditionalExpr } from '@angular/compiler';
+import { map, throwIfEmpty } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-registration',
@@ -15,6 +19,8 @@ import { UsersComponent } from '../users/users.component';
 })
 
 export class RegistrationComponent implements OnInit {
+  
+  imageSrc: string;
   employee:Employee;
   form: FormGroup;
   countryArr: any;
@@ -24,6 +30,10 @@ export class RegistrationComponent implements OnInit {
   isLoggedIn:boolean;
   required:any;
   isAdmin:boolean=false;
+  @ViewChild('fileInput') inputEl: ElementRef;
+  profile: any;
+  myGroup: FormGroup;
+ 
   
 
   constructor(
@@ -37,6 +47,9 @@ export class RegistrationComponent implements OnInit {
    
     this.getCountries();
     this.isLoggedIn=this.employeeService.isUserLoggedIn();
+    this.myGroup = new FormGroup({
+      profilePic: new FormControl()
+   });
     //this.required=this.isLoggedIn?Validators.nullValidator:Validators.required;
     this.form = this.formBuilder.group({
       address: this.formBuilder.group({
@@ -55,7 +68,8 @@ export class RegistrationComponent implements OnInit {
       dateofBirth:[''],
       userName: new FormControl({value: '', disabled: this.isLoggedIn?true:false}, Validators.required),
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword:['',this.isLoggedIn?Validators.nullValidator:Validators.required],
+      confirmPassword:['',this.isLoggedIn?Validators.nullValidator:Validators.required]
+      
     }
     ,{ 
       // here we attach our form validator
@@ -73,7 +87,9 @@ export class RegistrationComponent implements OnInit {
         this.form.patchValue(this.employeeService.getEditEmployee());
       }
       else{
-       this.employeeService.getUserByName().subscribe(x => this.form.patchValue(x));
+       this.employeeService.getUserByName().subscribe((x :Employee)=>{
+       this.form.patchValue(x)
+       });
       }
  
    }
@@ -121,6 +137,8 @@ export class RegistrationComponent implements OnInit {
   }
 
   editUser(){
+   
+      console.log(this.employee)
       this.employeeService.editUser(this.employee).subscribe(
 
         data=>{
@@ -143,12 +161,35 @@ export class RegistrationComponent implements OnInit {
       );
  }
 
+
+addPhoto(){
+  console.log("Inside add pic")
+  let inputEl: HTMLInputElement = this.inputEl.nativeElement;
+  let formData = new FormData();
+  const params=new HttpParams();
+  let username:String;
+  params.append("title","profilePic");
+  formData.append('image', inputEl.files.item(0));
+  if(inputEl.files.item(0)){
+    if(this.isLoggedIn)
+      username=this.employeeService.getLoggedInUserName()
+    else
+    username=this.form.get('userName').value
+  this.employeeService.addProfilePic(formData,username)
+       .subscribe((data)=>{
+              console.log(data)
+            alert("profile pic updated!")
+          }
+            );
+        }
+      
+      }
+
   onSubmit(){
+   
     this.submitted = true;
     console.log(this.form.controls.STATUS);
-
     if(this.form.valid){
-
       if(this.form.controls.userName.value=="admin"){
         alert("username cannot be admin");
         return "";
@@ -157,6 +198,9 @@ export class RegistrationComponent implements OnInit {
       console.log(this.form.get("userName").value)
       this.employee=Object.assign({},this.form.value);
       this.employee.address=Object.assign({},this.employee.address);
+     // this.employee.image=Object.assign({},this.myGroup.value);
+      //add photo via seperate rest end point 
+      this.addPhoto()
       if(this.isAdmin)
       this.employee.id=this.employeeService.editemployee.id;
       else{
@@ -171,7 +215,14 @@ export class RegistrationComponent implements OnInit {
       else{
         this.employee.userName=this.employeeService.getLoggedInUserName();
       }
-   
+      if(this.myGroup.get('profilePic').value==null){
+        console.log("Inside patch image")
+      this.employeeService.getUserByName().subscribe(
+        (data:Employee)=>{
+          this.employee.image=data.image
+        }
+      )
+      }
     this.editUser();
     }
     else
@@ -179,7 +230,8 @@ export class RegistrationComponent implements OnInit {
   }
 }
  
- 
+
+  
 
   interpolate(){
     if(this.employeeService.isUserLoggedIn())
@@ -210,5 +262,5 @@ export class RegistrationComponent implements OnInit {
   }
 
   
-
+   
 }

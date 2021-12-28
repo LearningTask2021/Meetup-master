@@ -1,4 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { EmployeeService } from '../services/employee.service';
 
@@ -11,14 +11,33 @@ export class MenuComponent implements OnInit {
 
    isLoggedIn=this.employeeService.isUserLoggedIn();
    isAdmin=this.employeeService.isAdmin();
+  imagePath:String;
+  srcString:String;
   //constructor();
   constructor(private employeeService:EmployeeService,
     private router: Router) { 
+     
      
     }
   
 
   ngOnInit(): void {
+    if(this.isLoggedIn){
+    this.employeeService.getUploadedImage().subscribe((response)=>{
+      console.log(response)
+      this.imagePath=response
+      console.log(this.imagePath)
+      if(this.imagePath){
+        this.srcString="data:image/jpg;base64," + this.imagePath
+      }
+      else{
+        this.srcString="assets/images/defaultAvatar.png"
+      }
+    console.log(this.srcString)
+      
+      })
+    }
+
     
   }
   
@@ -35,4 +54,6 @@ export class MenuComponent implements OnInit {
     this.router.navigate(["../register"]);
   }
 
+
+  
 }

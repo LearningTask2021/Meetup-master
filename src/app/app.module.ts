@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AgGridModule } from 'ag-grid-angular';
@@ -18,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ErrorComponent } from './error/error.component';
 import { MenuComponent } from './menu/menu.component';
 import { AdminComponent } from './admin/admin.component';
+import { UpdateProfilePicComponent } from './update-profile-pic/update-profile-pic.component';
 
 
 
@@ -28,6 +29,7 @@ const routes: Routes = [
   {path:'register',component:RegistrationComponent},
   {path:'error',component:ErrorComponent},
   {path:'admin',component:AdminComponent},
+  {path:'updateProfilePic',component:UpdateProfilePicComponent},
   // otherwise redirect to home
   { path: '**', redirectTo: 'home' }
 ];
@@ -43,6 +45,7 @@ const routes: Routes = [
     MenuComponent,
     HomeComponent,
     AdminComponent,
+    UpdateProfilePicComponent
    
   ],
   imports: [
@@ -50,10 +53,11 @@ const routes: Routes = [
     AppRoutingModule,
     BrowserAnimationsModule,
     BsDatepickerModule.forRoot(),
-     [RouterModule.forRoot(routes)],
+    [RouterModule.forRoot(routes)],
      ReactiveFormsModule,
      HttpClientModule,
-     AgGridModule.withComponents([])
+     AgGridModule.withComponents([]),
+     FormsModule
    
   ],
   exports: [RouterModule],

@@ -7,14 +7,18 @@
        
        
         <ul class="navbar-nav navbar-collapse justify-content-end">
+           
             <li>
                 <a  *ngIf="isLoggedIn" class="nav-link" routerLink="../editProfile" (click)=editProfile() [hidden]="isAdmin">Edit Profile</a>
             </li>
             <li>
                 <a  *ngIf="isLoggedIn" class="nav-link" href="/logout" (click)=handleLogout()>Logout</a>
             </li>
+
+            <img *ngIf="isLoggedIn" alt="profile"   src="{{srcString}}" style="border-radius:30px; height: 40px;; width: 40px;padding-right: 3px;">
             
             
         </ul>
     </nav>
+   
   </header>

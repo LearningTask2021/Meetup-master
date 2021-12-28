@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class EmployeeService {
+ 
   
   private userName:String;
 editemployee:Employee;
@@ -19,8 +20,7 @@ editemployee:Employee;
    httpOptions = {
     headers: new HttpHeaders({
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        
+        'Content-Type': 'application/json'
     })
 };
 
@@ -47,6 +47,7 @@ users:Employee[];
   }
 
   editUser(user:Employee){
+    console.log("Inside service to edit user",user)
     return this.http.put<Employee>("http://localhost:8080/update",user,this.httpOptions);
   }
 
@@ -115,4 +116,18 @@ users:Employee[];
   deleteUserByAdmin(id:String){
     return this.http.delete("http://localhost:8080/admin/delete/"+id);
   }
+
+  addProfilePic(formData: FormData,userName) {
+    let name="profilePic"
+    let baseUrl='http://localhost:8080/photos/add/'+userName+'/'+name
+    console.log("inside service to add image")
+    return this.http.post(baseUrl,formData)
+  }
+
+  getUploadedImage(){
+    let baseUrl='http://localhost:8080/photos/'+this.getLoggedInUserId()
+    console.log(baseUrl)
+    return this.http.get(baseUrl, {responseType: 'text'})
+  }
+
 }

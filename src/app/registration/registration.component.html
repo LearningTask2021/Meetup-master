@@ -1,4 +1,4 @@
-<app-menu></app-menu>
+<app-menu ></app-menu>
 
 <div class="container col-lg-6">
 <div class="card mt-5">
@@ -115,6 +115,13 @@
                     <div *ngIf="f.confirmPassword.errors.confirmPassword">Password and confirm password must match</div>
                 </div>
             </div>
+
+            <div  [formGroup]="myGroup" >
+                <label for="profilePic">upload profile</label>
+                <input type="file" formControlName="profilePic" class="form-control" #fileInput>
+            </div>
+            
+
             <div class="form-group">
                 <button class="btn btn-primary mt-3">
                    
