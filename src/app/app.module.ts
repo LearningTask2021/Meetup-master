@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AgGridModule } from 'ag-grid-angular';
+import { ToastrModule } from 'ngx-toastr';
 
 
 import { HomeComponent } from './home/home.component';
@@ -57,6 +58,7 @@ const routes: Routes = [
      ReactiveFormsModule,
      HttpClientModule,
      AgGridModule.withComponents([]),
+     ToastrModule.forRoot({timeOut: 1500}),
      FormsModule
    
   ],

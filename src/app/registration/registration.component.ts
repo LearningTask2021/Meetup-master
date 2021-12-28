@@ -9,6 +9,7 @@ import { UsersComponent } from '../users/users.component';
 import { HttpParams } from '@angular/common/http';
 import { ConditionalExpr } from '@angular/compiler';
 import { map, throwIfEmpty } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class RegistrationComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
+    private toastr: ToastrService
   ) { }
   
   ngOnInit(): void {
@@ -122,12 +124,14 @@ export class RegistrationComponent implements OnInit {
     this.employeeService.addEmployee(this.employee).subscribe(
       data=>{
         if(data==null){
-          alert("userName is already taken");
+         // alert("userName is already taken");
+         this.toastr.warning("Username is already taken");
         }
         else{
         console.log('from post method');
         console.log(data);
-       alert("Registerred successfully");
+      // alert("Registerred successfully");
+      this.toastr.success("Registered successfully");
        this.router.navigate(['/login']);
         }
       }
@@ -145,8 +149,8 @@ export class RegistrationComponent implements OnInit {
      
           console.log(data);
      
-        alert("Updated details!");
-
+       // alert("Updated details!");
+       this.toastr.success("Updated details successfully");
      
         this.router.navigate(["../users"]);
      
@@ -191,7 +195,8 @@ addPhoto(){
     console.log(this.form.controls.STATUS);
     if(this.form.valid){
       if(this.form.controls.userName.value=="admin"){
-        alert("username cannot be admin");
+        //alert("username cannot be admin");
+        this.toastr.warning("Username cannot be 'admin'");
         return "";
       }
       console.log(this.form.value)

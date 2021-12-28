@@ -3,6 +3,7 @@ import { Employee } from '../model/employee';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -26,7 +27,9 @@ editemployee:Employee;
 
 users:Employee[];
 
-  constructor(public http:HttpClient) { }
+  constructor(public http:HttpClient,
+    private toastr: ToastrService)
+     { }
 
   getEditEmployee(){
     return this.editemployee
@@ -57,7 +60,8 @@ users:Employee[];
   }
 
   handleError(): void {
-    alert("username or password is incorrect!");
+    //alert("username or password is incorrect!");
+    this.toastr.error("Username or Password is incorrect");
   }
   isUserLoggedIn() {
     let user = sessionStorage.getItem(this.USER_SESSION_ATTRIBUTE_NAME)
@@ -83,7 +87,8 @@ users:Employee[];
 
   logoutUser(){
     sessionStorage.removeItem(this.USER_SESSION_ATTRIBUTE_NAME);
-    alert("logged-out successfully");
+   // alert("logged-out successfully");
+   this.toastr.info("Logged out successfully");
     return true;
   }
   

@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 import { EmployeeService } from '../services/employee.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
+    private toastr: ToastrService
   ){
 
   }
@@ -57,7 +59,8 @@ export class LoginComponent implements OnInit {
         console.log(data);
         if(data!=null){ 
         this.employeeService.handleLogin(data);
-          alert('login successful');
+         // alert('login successful');
+         this.toastr.success('Loggedin successfully!');
           console.log(this.user["UserName"])
           if(this.user["UserName"]=="admin"){
             console.log("inside admin method")
