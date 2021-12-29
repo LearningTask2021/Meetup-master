@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Employee } from '../model/employee';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, ObservableInput, of, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 
 
@@ -28,7 +29,8 @@ editemployee:Employee;
 users:Employee[];
 
   constructor(public http:HttpClient,
-    private toastr: ToastrService)
+    private toastr: ToastrService,
+    private router:Router)
      { }
 
   getEditEmployee(){
@@ -133,6 +135,16 @@ users:Employee[];
     let baseUrl='http://localhost:8080/photos/'+this.getLoggedInUserId()
     console.log(baseUrl)
     return this.http.get(baseUrl, {responseType: 'text'})
+  }
+
+  //handling error when server is not up! 
+  handleServerError(err){
+    if(err.status==0){
+      console.log("inside 0 error handler")
+      this.router.navigate(["../error"])
+    }
+    if (err.status == 404) return of(null)
+    else throwError(err)
   }
 
 }

@@ -105,6 +105,7 @@ deleteSelected(){
     this.employeeService.deleteUserByAdmin(i.data.id).subscribe(
       data=>{
         console.log("deleted!");
+        this.ngOnInit();
       }
     )
    // alert("Deleted the records")

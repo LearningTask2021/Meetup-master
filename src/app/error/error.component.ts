@@ -7,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ErrorComponent implements OnInit {
 
+  errorMsg:String
+
   constructor() { }
 
   ngOnInit(): void {
+    this.errorMsg="Unable to connect to server!"
   }
 
 }

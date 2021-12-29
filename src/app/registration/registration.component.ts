@@ -8,8 +8,9 @@ import { Address } from '../model/address';
 import { UsersComponent } from '../users/users.component';
 import { HttpParams } from '@angular/common/http';
 import { ConditionalExpr } from '@angular/compiler';
-import { map, throwIfEmpty } from 'rxjs/operators';
+import { catchError, map, throwIfEmpty } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { of, throwError } from 'rxjs';
 
 
 @Component({
@@ -121,7 +122,15 @@ export class RegistrationComponent implements OnInit {
   get f() { return this.form.controls; }
 
   addUser() {
-    this.employeeService.addEmployee(this.employee).subscribe(
+    this.employeeService.addEmployee(this.employee).pipe(
+      // here we can stop the error being thrown for certain error responses
+      catchError(err => {
+        console.log(err)
+        this.employeeService.handleServerError(err)
+        return ''
+      })
+    )
+    .subscribe(
       data=>{
         if(data==null){
          // alert("userName is already taken");

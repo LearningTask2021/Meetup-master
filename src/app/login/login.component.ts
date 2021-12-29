@@ -6,6 +6,7 @@ import { EmployeeService } from '../services/employee.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { of, throwError } from 'rxjs';
 
 
 @Component({
@@ -42,6 +43,15 @@ export class LoginComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
+  handleError(error:any): void {
+   
+    if(error.status===0){
+      console.log("inside error handling for 500 status");
+    this.router.navigate(["../error"]);
+    }
+   }
+ 
+
   onSubmit() {
     this.submitted = true;
     if(this.loginForm.valid){
@@ -53,7 +63,15 @@ export class LoginComponent implements OnInit {
         this.user["password"] = this.loginForm.value["password"];
 
 
-    this.employeeService.loginUser(this.user).subscribe(
+    this.employeeService.loginUser(this.user).pipe(
+      // here we can stop the error being thrown for certain error responses
+      catchError(err => {
+        console.log(err)
+        this.employeeService.handleServerError(err)
+        return ''
+      })
+    )
+   .subscribe(
       (data)=>
       {
         console.log(data);
@@ -75,10 +93,13 @@ export class LoginComponent implements OnInit {
           this.employeeService.handleError();
           
         }
-      }
+      },
+      error=>this.handleError
     );
       }
      
 }
-
+  
 }
+
+
