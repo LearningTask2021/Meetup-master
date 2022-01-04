@@ -184,8 +184,15 @@ addPhoto(){
   params.append("title","profilePic");
   formData.append('image', inputEl.files.item(0));
   if(inputEl.files.item(0)){
-    if(this.isLoggedIn)
-      username=this.employeeService.getLoggedInUserName()
+    if(this.isLoggedIn){
+      if(this.isAdmin){
+        username=this.employeeService.editemployee.userName;
+      }
+      else{
+        username=this.employeeService.getLoggedInUserName();
+      }
+    }
+     
     else
     username=this.form.get('userName').value
   this.employeeService.addProfilePic(formData,username)
