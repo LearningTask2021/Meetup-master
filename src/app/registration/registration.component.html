@@ -59,7 +59,7 @@
                 <label for="country">Country</label>
                 <select autocomplete="new-password" formControlName="country" class="form-control" (change)="getStates($event)">
                     <option value="">Select Country</option>
-                    <option *ngFor="let country of countryArr" value="{{country.id}}">{{country.name}}</option>
+                    <option *ngFor="let country of countryArr">{{country.name}}</option>
                 </select>
             </div>
 
@@ -67,7 +67,7 @@
                 <label for="state">State</label>
                 <select autocomplete="new-password" formControlName="state" class="form-control" (change)="getCities($event)">
                     <option value="">Select State</option>
-                    <option *ngFor="let state of stateArr" value="{{state.id}}">{{state.name}}</option>
+                    <option *ngFor="let state of stateArr">{{state.name}}</option>
                 </select>
             </div>
 

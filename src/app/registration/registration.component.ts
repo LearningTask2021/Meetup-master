@@ -268,12 +268,11 @@ addPhoto(){
   }
 
   getStates(event){
-    console.log("States");
-    this.stateArr=this.countryArr[parseInt((event.target.value))+1].states;
+    this.stateArr=this.countryArr[this.countryArr.findIndex(country=>country.name==event.target.value)].states;
   }
 
   getCities(event){
-    var index = this.stateArr.findIndex(state => state.id==event.target.value);
+    var index = this.stateArr.findIndex(state => state.name==event.target.value);
     this.cityArr=this.stateArr[index].cities;
   }
   cancel(){
