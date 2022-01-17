@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class EmployeeService {
  
-  
+  baseUrl:String='http://meetupapplication-env.eba-xmqy62ts.ap-south-1.elasticbeanstalk.com/';
   private userName:String;
 editemployee:Employee;
   USER_SESSION_ATTRIBUTE_NAME= 'authenticatedUser';
@@ -42,18 +42,18 @@ users:Employee[];
   }
 
   addEmployee(employee:Employee){
-    return this.http.post<Employee>("http://localhost:8080/employee",employee)
+    return this.http.post<Employee>(this.baseUrl+"employee",employee)
     
     
   }
 
   loginUser(user:Map<String,String>){
-    return this.http.post<Employee>("http://localhost:8080/login",user,this.httpOptions);
+    return this.http.post<Employee>(this.baseUrl+"login",user,this.httpOptions);
   }
 
   editUser(user:Employee){
     console.log("Inside service to edit user",user)
-    return this.http.put<Employee>("http://localhost:8080/update",user,this.httpOptions);
+    return this.http.put<Employee>(this.baseUrl+"update",user,this.httpOptions);
   }
 
   handleLogin(user) {
@@ -95,7 +95,7 @@ users:Employee[];
   }
   
   getAllUsers(){
-    return this.http.get<Employee[]>("http://localhost:8080/employee")
+    return this.http.get<Employee[]>(this.baseUrl+"employee")
   }
 
   getCountries(){
@@ -116,23 +116,23 @@ users:Employee[];
 
   getUserByName(){
 
-    return this.http.get("http://localhost:8080/employee/"+this.getLoggedInUserName());
+    return this.http.get(this.baseUrl+"employee/"+this.getLoggedInUserName());
 
   }
 
   deleteUserByAdmin(id:String){
-    return this.http.delete("http://localhost:8080/admin/delete/"+id);
+    return this.http.delete(this.baseUrl+"admin/delete/"+id);
   }
 
   addProfilePic(formData: FormData,userName) {
     let name="profilePic"
-    let baseUrl='http://localhost:8080/photos/add/'+userName+'/'+name
+    let baseUrl=this.baseUrl+'photos/add/'+userName+'/'+name
     console.log("inside service to add image")
     return this.http.post(baseUrl,formData)
   }
 
   getUploadedImage(){
-    let baseUrl='http://localhost:8080/photos/'+this.getLoggedInUserId()
+    let baseUrl=this.baseUrl+'photos/'+this.getLoggedInUserId()
     console.log(baseUrl)
     return this.http.get(baseUrl, {responseType: 'text'})
   }
