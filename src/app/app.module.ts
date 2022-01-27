@@ -54,7 +54,7 @@ const routes: Routes = [
     AppRoutingModule,
     BrowserAnimationsModule,
     BsDatepickerModule.forRoot(),
-    [RouterModule.forRoot(routes)],
+    [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
      ReactiveFormsModule,
      HttpClientModule,
      AgGridModule.withComponents([]),
